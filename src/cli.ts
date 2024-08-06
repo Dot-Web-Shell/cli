@@ -71,9 +71,9 @@ class Command {
             options += `${option}`;
         }
         if (this.cmd.description) {
-            return `${this.cmd.name}\n\t${this.cmd.description}${options}\t${this.cmd.description}`;
+            return `${this.cmd.name}\n\t${this.cmd.description}${options}\t${this.cmd.description}\n\n`;
         }
-        return `${this.cmd.name} ${options}`;
+        return `${this.cmd.name} ${options}\n\n`;
     }
 
     toString() {
@@ -106,6 +106,8 @@ export class CLI {
                 }
                 return;
             }
+
+            const c = this.findCommand(command);
 
 
             return;
