@@ -1,3 +1,5 @@
+import prompts from "prompts";
+
 export interface ICommandOption {
     required?: boolean;
     /** -- will be prefixed automatically */
@@ -22,6 +24,50 @@ class Command {
 
     constructor(name) {
         this.cmd.name = name;
+    }
+
+    async executeCommand(options: string[]) {
+        const received = {}
+        for (const element of options) {
+            if (!element.startsWith("--")) {
+                continue;
+            }
+            let option = element.substring(2);
+            const index = option.indexOf("=");
+            let value = "";
+            if (index !== -1) {
+                value = option.substring(index + 1);
+                option = option.substring(0, index);
+            }
+            received[option] = value;
+        }
+
+        for (const element of this.cmd.options) {
+            let { option } = element;
+            if (option.startsWith("--")) {
+                option = option.substring(2);
+            }
+            if (received[option]) {
+                continue;
+            }
+            if (element.required) {
+                // prompt...
+                while (true) {
+                    const text = await prompts({
+                        message: element.prompt || element.option,
+                        name: "value",
+                        type: "text",
+                    });
+                    if (!text.value) {
+                        continue;
+                    }
+                    received[option] = text.value;
+                    break;
+                }
+            }
+        }
+
+        await this.cmd.execute(this.cmd.name, received);
     }
 
     description(description: string) {
@@ -89,9 +135,17 @@ export class CLI {
 
     commands = [] as Command[];
 
-    execute(argv = process.argv) {
+    async execute(argv = process.argv) {
 
-        if (argv.length > 2) {
+        if (argv.length <= 2) {
+            for (const element of this.commands) {
+                console.log(element.toString());
+            }
+            process.exit(0);
+            return;
+        }
+
+        try {
 
             const [program, script, command, ... options] = argv;
 
@@ -109,13 +163,17 @@ export class CLI {
 
             const c = this.findCommand(command);
 
+            await c.executeCommand(options);
 
+            process.exit(0);
+            return;    
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
             return;
         }
         
-        for (const element of this.commands) {
-            console.log(element.toString());
-        }
+
     }
 
     findCommand(name: string) {

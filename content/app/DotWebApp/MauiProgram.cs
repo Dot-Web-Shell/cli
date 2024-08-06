@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using NativeShell;
-namespace SocialMailApp;
+namespace DotWebApp;
 
 
 public static class MauiProgram

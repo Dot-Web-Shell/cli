@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace SocialMailApp;
+namespace DotWebApp;
 
 [Application]
 public class MainApplication : MauiApplication

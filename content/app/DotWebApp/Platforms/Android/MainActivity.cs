@@ -4,7 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using NativeShell;
 
-namespace SocialMailApp;
+namespace DotWebApp;
 
 [IntentFilter(
     new[] {

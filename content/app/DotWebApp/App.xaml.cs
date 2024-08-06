@@ -1,6 +1,6 @@
 ﻿using NativeShell.Pages;
 
-namespace SocialMailApp;
+namespace DotWebApp;
 
 public partial class App : Application
 {
@@ -9,7 +9,7 @@ public partial class App : Application
 		InitializeComponent();
 
 		MainPage = new NativeShellMainPage() {
-			
+			Url = "$$config.url$$"
 		};
 	}
 }

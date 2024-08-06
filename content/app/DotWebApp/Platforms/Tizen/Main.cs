@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace SocialMailApp;
+namespace DotWebApp;
 
 class Program : MauiApplication
 {

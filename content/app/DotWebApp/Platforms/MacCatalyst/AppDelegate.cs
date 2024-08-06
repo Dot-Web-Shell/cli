@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace SocialMailApp;
+namespace DotWebApp;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

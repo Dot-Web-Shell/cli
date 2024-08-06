@@ -1,7 +1,7 @@
 ﻿using Foundation;
 using NativeShell.Platforms;
 
-namespace SocialMailApp;
+namespace DotWebApp;
 
 [Register("AppDelegate")]
 public class AppDelegate : NativeShellAppDelegate
