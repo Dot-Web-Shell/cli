@@ -3,8 +3,10 @@ import { cwd } from "../../cwd/cwd.js";
 
 const init = (str, options) => {
 
+    const { name, id, url } = AppCommands.opts();
+
     const defaultConfig = {
-        ... options
+        name, id, url
     };
 
     cwd.createTextFileIfNotExists("dot-web-shell.config.json", JSON.stringify(defaultConfig, void 0, 4));
@@ -16,5 +18,5 @@ AppCommands
     .description("Generate default config")
     .option("--name", "Name of the app", "App Name")
     .option("--id", "App/Bundle ID of the App", "com.dot-web-shell.app")
-    .option("--url", "URL To Load the App")
+    .requiredOption("--url", "URL To Load the App")
     .action(init);
