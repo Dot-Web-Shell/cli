@@ -21,8 +21,8 @@ cli
 
         const pkg = await pkgFile.readJson();
 
-        pkg.devDependencies ??= {};
-        pkg["@dot-web-shell/cli"] = "^" + AppInfo.version;
+        pkg.dependencies ??= {};
+        pkg.dependencies["@dot-web-shell/cli"] = "^" + AppInfo.version;
         pkg.scripts ??= {};
         pkg.scripts.sync = "node ./node_modules/@dot-web-shell/cli sync";
         pkg.scripts.postversion = "git push --follow-tags";
