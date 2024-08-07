@@ -19,7 +19,9 @@ cli
         const pkg = await cwd.readJson("package.json");
 
         const config = await cwd.readJson("dot-web-shell.config.json");
-        config.version = pkg.version;
+        const tokens = pkg.version.split(".");
+        tokens.pop();
+        config.version = tokens.join(".");
         config.buildNumber ??= 1;
         config.buildNumber = (parseInt(config.buildNumber, 10) + 1).toString();
 
