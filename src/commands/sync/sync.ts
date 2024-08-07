@@ -63,7 +63,8 @@ cli
 async function updateProjectFile(config: any) {
     const projectFile = cwd.file("maui/DotWebApp/DotWebApp.csproj");
     const $ = cheerio.load(await projectFile.readFile("utf8"), {
-        xmlMode: true
+        xmlMode: true,
+        decodeEntities: false,
     });
 
     $("Project > PropertyGroup > ApplicationDisplayVersion").text(config.vesion);
