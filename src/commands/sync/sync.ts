@@ -3,6 +3,7 @@ import { AppInfo, packagePath } from "../../AppInfo.js";
 import { cli } from "../../cli.js";
 import { cwd } from "../../cwd/cwd.js";
 import { readFile, writeFile } from "fs/promises";
+import { spawn, spawnSync } from "child_process";
 
 cli
     .command("sync")
@@ -23,7 +24,7 @@ cli
         pkg.devDependencies ??= {};
         pkg["@dot-web-shell/cli"] = "^" + AppInfo.version;
         pkg.scripts ??= {};
-        pkg.scripts.version = "node ./node_modules/@dot-web-shell/cli sync";
+        pkg.scripts.sync = "node ./node_modules/@dot-web-shell/cli sync";
         pkg.scripts.postversion = "git push --follow-tags";
         pkg.scripts.build = "node ./node_modules/@dot-web-shell/cli setup-build";
 
@@ -40,6 +41,10 @@ cli
         config.buildNumber = (parseInt(config.buildNumber, 10) + 1).toString();
 
         await dotConfig.writeJson(config);
+
+        spawnSync("git add -A");
+        spawnSync(`git commit -m "Build Updated" `);
+        spawnSync("npm version patch");
     
 
     });
