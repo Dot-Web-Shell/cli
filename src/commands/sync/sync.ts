@@ -30,7 +30,7 @@ cli
         pkg.devDependencies["@dot-web-shell/cli"] = "^" + AppInfo.version;
         pkg.scripts ??= {};
         pkg.scripts.sync = "node ./node_modules/@dot-web-shell/cli sync";
-        pkg.scripts.postversion = "git push --follow-tags";
+        pkg.scripts.postversion = "npm run sync && git push --follow-tags";
         pkg.scripts.build = "node ./setup-build.mjs";
 
         await pkgFile.writeJson(pkg);
@@ -49,7 +49,6 @@ cli
 
         spawnSync("git",["add","-A"]);
         spawnSync("git",["commit","-m", `Build Updated to ${config.buildNumber}`]);
-        spawnSync("npm",["version","patch"]);
     
 
     });
