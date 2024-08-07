@@ -47,9 +47,9 @@ cli
 
         await dotConfig.writeJson(config);
 
-        spawnSync("git add -A");
-        spawnSync(`git commit -m "Build Updated" `);
-        spawnSync("npm version patch");
+        spawnSync("git",["add","-A"]);
+        spawnSync("git",["commit","-m", `Build Updated to ${config.buildNumber}`]);
+        spawnSync("npm",["version","patch"]);
     
 
     });

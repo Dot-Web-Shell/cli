@@ -26,5 +26,5 @@ cli
         await cwd.writeFile("package.json", JSON.stringify(pkg, void 0, 4));
 
         // run npm install....
-        spawnSync("npm install");
+        spawnSync("npm", ["install"]);
     });
