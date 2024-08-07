@@ -50,6 +50,11 @@ class Command {
             if (received[option]) {
                 continue;
             }
+
+            if (element.defaultValue) {
+                received[option] = element.defaultValue;
+            }
+
             if (element.required) {
                 // prompt...
                 while (true) {
@@ -92,6 +97,7 @@ class Command {
         this.cmd.options.push({
             option,
             prompt,
+            defaultValue,
             description
         })
         return this;
