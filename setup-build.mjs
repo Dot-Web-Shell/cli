@@ -1,9 +1,11 @@
 import { readFileSync } from "fs";
 import { existsSync, readdirSync } from "fs";
-import { readFile, writeFile } from "fs/promises";
+import { copyFile, cp, readFile, writeFile } from "fs/promises";
 import { join, parse } from "path";
 
 export default class LocalFile {
+
+    /** @returns {Generator<LocalFile>} */
     static *readDir(src) {
         for (const d of readdirSync(src, { withFileTypes: true })) {
             const c = join(src, d.name);
@@ -37,6 +39,11 @@ export default class LocalFile {
     async writeJson(json) {
         return this.writeFile(JSON.stringify(json, void 0, 4));
     }
+
+    async copy(dest) {
+        await copyFile(this.path, dest);
+        return new LocalFile(dest);
+    }
 }
 
 const config = JSON.parse(readFileSync("dot-web-shell.config.json", "utf8"));
@@ -50,7 +57,13 @@ for (const key in config) {
     }
 }
 
-for (const element of LocalFile.readDir( cwd.file("maui").path )) {
+const generated = join(process.cwd(), "generated");
+
+const maui = join(process.cwd(), "maui");
+
+await cp(maui, generated, { recursive: true });
+
+for (const element of LocalFile.readDir(generated)) {
 
     if (!/\.(cs|xaml|json|xml|csproj|text|js|ts)$/i.test(element.name)) {
         continue;
