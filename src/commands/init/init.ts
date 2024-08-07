@@ -1,5 +1,7 @@
 import { cwd } from "../../cwd/cwd.js";
 import { cli } from "../../cli.js";
+import { AppInfo } from "../../AppInfo.js";
+import { spawnSync } from "child_process";
 
 
 cli
@@ -15,11 +17,14 @@ cli
         // update package.json
 
         const pkg = await cwd.readJson("package.json");
-        pkg.dependencies ??= {};
-        pkg["@dot-web-shell/build"] = "^1.0.0";
+        pkg.devDependencies ??= {};
+        pkg["@dot-web-shell/cli"] = "^" + AppInfo.version;
         pkg.scripts ??= {};
         pkg.scripts.version = "node ./node_modules/@dot-web-shell/cli sync";
         pkg.scripts.postversion = "git push --follow-tags";
 
         await cwd.writeFile("package.json", JSON.stringify(pkg, void 0, 4));
+
+        // run npm install....
+        spawnSync("npm install");
     });
