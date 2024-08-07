@@ -60,12 +60,8 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="config\google-services.json" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
-		<GoogleServicesJson Include="config\google-services.json" />
+		<!-- <GoogleServicesJson Include="config\google-services.json" /> -->
 	</ItemGroup>
 
 	<ItemGroup>
