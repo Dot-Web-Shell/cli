@@ -34,7 +34,7 @@ cli
 
         for (const element of cwd.readDir("maui")) {
 
-            if (!/\.(cs|xaml|json|xml|csproj)$/i.test(element)) {
+            if (!/\.(cs|xaml|json|xml|csproj|text|js|ts)$/i.test(element)) {
                 continue;
             }
 
