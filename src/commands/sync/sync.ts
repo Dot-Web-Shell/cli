@@ -31,7 +31,7 @@ cli
         pkg.scripts ??= {};
         pkg.scripts.sync = "node ./node_modules/@dot-web-shell/cli sync";
         pkg.scripts.postversion = "git push --follow-tags";
-        pkg.scripts.build = "node ./node_modules/@dot-web-shell/setup-build.mjs";
+        pkg.scripts.build = "node ./setup-build.mjs";
 
         await pkgFile.writeJson(pkg);
 
