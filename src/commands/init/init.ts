@@ -18,7 +18,8 @@ cli
         pkg.dependencies ??= {};
         pkg["@dot-web-shell/build"] = "^1.0.0";
         pkg.scripts ??= {};
-        pkg.scripts.version = "node @dot-web-shell/build/index.js post-version && git push --follow-tags";
+        pkg.scripts.version = "node @dot-web-shell/cli sync";
+        pkg.scripts.postversion = "git push --follow-tags";
 
         await cwd.writeFile("package.json", JSON.stringify(pkg, void 0, 4));
     });

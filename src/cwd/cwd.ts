@@ -1,8 +1,19 @@
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from "fs";
 import { copyFile, mkdir, readdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
 
-export const copyDir = async (src: string, dest: string, replace) => {
+function *dirList(src): Generator<string> {
+    for (const d of readdirSync(src, { withFileTypes: true })) {
+        const c = join(src,d.name);
+        if (d.isDirectory()) {
+            yield *dirList(c);
+            continue;
+        }
+        yield c;
+    }    
+}
+
+const copyDir = async (src: string, dest: string, replace) => {
     if (!existsSync(dest)) {
         mkdirSync(dest, { recursive: true });
     }
@@ -50,6 +61,10 @@ export const cwd = {
         writeFileSync(file, data);
     },
 
+    exists(path) {
+        return existsSync(join(this.path, path));
+    },
+
     async copyFolder(src, dest, config) {
         const path = join(this.path, dest);
         const replace = [];
@@ -73,6 +88,10 @@ export const cwd = {
 
     writeFile(path, content, encoding = "utf8" as BufferEncoding) {
         return writeFile(path, content, encoding);
+    },
+
+    readDir(path) {
+        return dirList(this.path);
     }
 
 };
