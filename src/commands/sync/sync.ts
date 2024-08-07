@@ -2,7 +2,7 @@ import { join } from "path";
 import { AppInfo, packagePath } from "../../AppInfo.js";
 import { cli } from "../../cli.js";
 import { cwd } from "../../cwd/cwd.js";
-import { readFile, writeFile } from "fs/promises";
+import { copyFile, readFile, writeFile } from "fs/promises";
 import { spawn, spawnSync } from "child_process";
 
 cli
@@ -17,16 +17,21 @@ cli
 
         }
 
+        const setupFile = join(packagePath, "setup-build.mjs");
+
+        const destSetupFile = cwd.file("setup-build.mjs");
+        await copyFile(setupFile, destSetupFile.path);
+
         const pkgFile = cwd.file("package.json");
 
         const pkg = await pkgFile.readJson();
 
-        pkg.dependencies ??= {};
-        pkg.dependencies["@dot-web-shell/cli"] = "^" + AppInfo.version;
+        pkg.devDependencies ??= {};
+        pkg.devDependencies["@dot-web-shell/cli"] = "^" + AppInfo.version;
         pkg.scripts ??= {};
         pkg.scripts.sync = "node ./node_modules/@dot-web-shell/cli sync";
         pkg.scripts.postversion = "git push --follow-tags";
-        pkg.scripts.build = "node ./node_modules/@dot-web-shell/cli setup-build";
+        pkg.scripts.build = "node ./node_modules/@dot-web-shell/setup-build.mjs";
 
         await pkgFile.writeJson(pkg);
 
