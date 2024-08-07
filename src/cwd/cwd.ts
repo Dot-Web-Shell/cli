@@ -69,5 +69,10 @@ export const cwd = {
 
     async readJson(path) {
         return JSON.parse(await readFile(path, "utf8"));
+    },
+
+    writeFile(path, content, encoding = "utf8" as BufferEncoding) {
+        return writeFile(path, content, encoding);
     }
+
 };
