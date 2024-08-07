@@ -4,6 +4,7 @@ import { cli } from "../../cli.js";
 import { cwd } from "../../cwd/cwd.js";
 import { copyFile, readFile, writeFile } from "fs/promises";
 import { spawn, spawnSync } from "child_process";
+import cheerio from "cheerio";
 
 cli
     .command("sync")
@@ -47,8 +48,34 @@ cli
 
         await dotConfig.writeJson(config);
 
+        // update relevant files...
+        await updateProjectFile(config);
+
+        await updateConfigUrl(config);
+
         spawnSync("git",["add","-A"]);
         spawnSync("git",["commit","-m", `Build Updated to ${config.buildNumber}`]);
     
 
     });
+
+
+async function updateProjectFile(config: any) {
+    const projectFile = cwd.file("maui/DotWebApp/DotWebApp.csproj");
+    const $ = cheerio.load(await projectFile.readFile("utf8"));
+
+    $("Project > PropertyGroup > ApplicationDisplayVersion").text(config.vesion);
+    $("Project > PropertyGroup > ApplicationVersion").text(config.buildNumber);
+    $("Project > PropertyGroup > ApplicationTitle").text(config.name);
+    $("Project > PropertyGroup > ApplicationId").text(config.id);
+
+    await projectFile.writeFile( $.xml(), "utf8");
+}
+
+async function updateConfigUrl(config: any) {
+    const appSettingsFile = cwd.file("maui/DotWebApp/appsettings.json");
+    const appSettings = await appSettingsFile.readJson();
+    appSettings.App.Url = config.url;
+    await appSettingsFile.writeJson(appSettings);
+}
+

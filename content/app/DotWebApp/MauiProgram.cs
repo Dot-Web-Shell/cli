@@ -1,5 +1,8 @@
-﻿using CommunityToolkit.Maui;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using CommunityToolkit.Maui;
 using NativeShell;
+using System.Reflection;
 namespace DotWebApp;
 
 
@@ -18,6 +21,15 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
-		return builder.Build();
+        var a = Assembly.GetExecutingAssembly();
+        using var stream = a.GetManifestResourceStream("DotWebApp.appsettings.json");
+
+        var config = new ConfigurationBuilder()
+            .AddJsonStream(stream)
+            .Build();
+
+        builder.Configuration.AddConfiguration(config);
+
+        return builder.Build();
 	}
 }
