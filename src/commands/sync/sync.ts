@@ -1,5 +1,5 @@
 import { join } from "path";
-import { packagePath } from "../../AppInfo.js";
+import { AppInfo, packagePath } from "../../AppInfo.js";
 import { cli } from "../../cli.js";
 import { cwd } from "../../cwd/cwd.js";
 import { readFile, writeFile } from "fs/promises";
@@ -16,42 +16,30 @@ cli
 
         }
 
-        const pkg = await cwd.readJson("package.json");
+        const pkgFile = cwd.file("package.json");
 
-        const config = await cwd.readJson("dot-web-shell.config.json");
+        const pkg = await pkgFile.readJson();
+
+        pkg.devDependencies ??= {};
+        pkg["@dot-web-shell/cli"] = "^" + AppInfo.version;
+        pkg.scripts ??= {};
+        pkg.scripts.version = "node ./node_modules/@dot-web-shell/cli sync";
+        pkg.scripts.postversion = "git push --follow-tags";
+        pkg.scripts.build = "node ./node_modules/@dot-web-shell/cli setup-build";
+
+        await pkgFile.writeJson(pkg);
+
+
+        const dotConfig = cwd.file("dot-web-shell.config.json");
+
+        const config = await dotConfig.readJson();
         const tokens = pkg.version.split(".");
         tokens.pop();
         config.version = tokens.join(".");
         config.buildNumber ??= 1;
         config.buildNumber = (parseInt(config.buildNumber, 10) + 1).toString();
 
-        const substitutions = [];
-
-        for (const key in config) {
-            if (Object.prototype.hasOwnProperty.call(config, key)) {
-                const element = config[key];
-                substitutions.push([`$$config.${key}$$`, element]);
-            }
-        }
-
-        for (const element of cwd.readDir("maui")) {
-
-            if (!/\.(cs|xaml|json|xml|csproj|text|js|ts)$/i.test(element)) {
-                continue;
-            }
-
-            // update config...
-            const text = await readFile(element, "utf8");
-
-            let replaced = text;
-            for (const [k,v] of substitutions) {
-                replaced = replaced.replaceAll(k, v);
-            }
-
-            if (replaced !== text) {
-                await writeFile(element, replaced, "utf8");
-            }
+        await dotConfig.writeJson(config);
     
-        }
 
     });

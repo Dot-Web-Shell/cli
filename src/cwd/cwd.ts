@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "fs";
 import { copyFile, mkdir, readdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
+import LocalFile from "../core/LocalFile.js";
 
 function *dirList(src): Generator<string> {
     for (const d of readdirSync(src, { withFileTypes: true })) {
@@ -65,6 +66,10 @@ export const cwd = {
         return existsSync(join(this.path, path));
     },
 
+    file(path) {
+        return new LocalFile(join(this.path, path))
+    },
+
     async copyFolder(src, dest, config) {
         const path = join(this.path, dest);
         const replace = [];
@@ -91,7 +96,7 @@ export const cwd = {
     },
 
     readDir(path) {
-        return dirList(this.path);
+        return dirList(join(this.path, path));
     }
 
 };
