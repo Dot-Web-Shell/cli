@@ -67,7 +67,7 @@ async function updateProjectFile(config: any) {
         decodeEntities: false,
     });
 
-    $("Project > PropertyGroup > ApplicationDisplayVersion").text(config.vesion);
+    $("Project > PropertyGroup > ApplicationDisplayVersion").text(config.version);
     $("Project > PropertyGroup > ApplicationVersion").text(config.buildNumber);
     $("Project > PropertyGroup > ApplicationTitle").text(config.name);
     $("Project > PropertyGroup > ApplicationId").text(config.id);
