@@ -3,17 +3,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace DotWebApp;
 
-class AppInfo {
-	public string Url { get;set; }
-}
-
 public partial class App : Application
 {
 	public App(IConfiguration config)
 	{
 		InitializeComponent();
 
-		var url = config.Get<AppInfo>()?.Url;
+		var url = config.GetSection("App")?.GetValue<string>("Url");
 
 		MainPage = new NativeShellMainPage() {
 			Url = url

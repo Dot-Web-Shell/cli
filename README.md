@@ -12,9 +12,25 @@ Dot-Web-Shell is a webview based app (similar to capacitor/cordova), completely 
 3. Run `npm install -s @dot-web-shell/cli`
 4. Run `node ./node_modules/@dot-web-shell/cli init`
 5. Commit your changes to git repo
-6. Run `npm version patch`
+6. Run `npm run sync`
 
 # Setup CI
 
-Since the app 
+1. `npm version patch` will sync the version and push the code in repository.
+
+# Getting Started
+
+Dot-Web-Shell's WebView exposes `nativeShell` property on the `window`.
+
+# Execute Simple Script
+
+```javascript
+
+    const getName = async () => {
+        const clr = await import("clr");
+    };
+
+    const result = await window.nativeShell.invoke(getName);
+
+```
 
