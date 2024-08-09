@@ -36,6 +36,14 @@
 		<ArchiveOnBuild>true</ArchiveOnBuild>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+		<MtouchLink>None</MtouchLink>
+		<EnableSGenConc>true</EnableSGenConc>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Registrar>static</Registrar>
+	</PropertyGroup>
+
+
 	<ItemGroup>
 		<PackageReference Include="NeuroSpeech.NativeShell" Version="1.2.22" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.80" />
